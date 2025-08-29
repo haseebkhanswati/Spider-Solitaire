@@ -10,6 +10,10 @@ let difficulty = 'medium';
 let selected = null;
 let hintCards = [];
 let lastHintMove = null;
+let shownHints = [];
+let isPaused = false;
+let totalPausedTime = 0;
+let pauseStartTime = 0;
 
 function createAndShuffleDeck() {
   deck = [];
@@ -66,6 +70,11 @@ function newGame() {
   selected = null;
   hintCards = [];
   lastHintMove = null;
+  shownHints = [];
+  isPaused = false;
+  totalPausedTime = 0;
+  pauseStartTime = 0;
+  document.getElementById('pauseBtn').textContent = '⏸️ Pause';
   
   createAndShuffleDeck();
   
@@ -97,12 +106,16 @@ function render() {
     let dynamicHeight = Math.max(250, piles[i].length * 30 + 120);
     pileDiv.style.minHeight = `${dynamicHeight}px`;
 
+    let totalOffset = 5;
+    
     piles[i].forEach((card, index) => {
       let cardDiv = document.createElement("div");
       cardDiv.className = "card";
       cardDiv.style.setProperty('--card-offset', index);
-      let spacing = piles[i].length > 8 ? Math.max(25, 300 / piles[i].length) : 30;
-      cardDiv.style.top = `${5 + index * spacing}px`;
+      
+      cardDiv.style.top = `${totalOffset}px`;
+      let spacing = card.faceUp ? (piles[i].length > 8 ? Math.max(25, 300 / piles[i].length) : 30) : 15;
+      totalOffset += spacing;
       cardDiv.style.zIndex = index + 1;
 
       if (card.faceUp) {
@@ -169,6 +182,7 @@ function render() {
 }
 
 function handleClick(pileIndex, cardIndex) {
+  if (isPaused) return;
   let pile = piles[pileIndex];
 
   if (!selected) {
@@ -234,6 +248,7 @@ function rankValue(rank) {
 }
 
 function deal() {
+  if (isPaused) return;
   if (piles.some((p) => p.length === 0)) {
     const hintDisplay = document.getElementById('hintDisplay');
     hintDisplay.textContent = '❌ Cannot deal when piles are empty!';
@@ -344,6 +359,7 @@ function undoMove() {
   selected = null;
   hintCards = [];
   lastHintMove = null;
+  shownHints = [];
   
   document.getElementById('moves').textContent = moves;
   document.getElementById('score').textContent = score;
@@ -410,10 +426,22 @@ function showHint() {
     return;
   }
   
-  let bestMove = possibleMoves.find(move => {
+  // Filter out already shown hints
+  let newMoves = possibleMoves.filter(move => 
+    !shownHints.some(hint => hint.from === move.from && hint.to === move.to && hint.card === move.card.rank)
+  );
+  
+  if (newMoves.length === 0) {
+    shownHints = [];
+    newMoves = possibleMoves;
+  }
+  
+  let bestMove = newMoves.find(move => {
     let fromPile = piles[move.from];
     return fromPile.length > move.length && !fromPile[fromPile.length - move.length - 1].faceUp;
-  }) || possibleMoves[0];
+  }) || newMoves[0];
+  
+  shownHints.push({from: bestMove.from, to: bestMove.to, card: bestMove.card.rank});
   
   let moveText = bestMove.length > 1 ? 
     `💡 Move ${bestMove.card.rank}${bestMove.card.suit} (+${bestMove.length-1}) from column ${bestMove.from + 1} to ${bestMove.to + 1}` :
@@ -427,7 +455,8 @@ function showHint() {
 function startTimer() {
   startTime = Date.now();
   timerInterval = setInterval(() => {
-    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    if (isPaused) return;
+    const elapsed = Math.floor((Date.now() - startTime - totalPausedTime) / 1000);
     const remaining = 900 - elapsed; // 15 minutes = 900 seconds
     
     if (remaining <= 0) {
@@ -461,6 +490,22 @@ function startTimer() {
 function closeWinPopup() {
   document.getElementById('winPopup').style.display = 'none';
   newGame();
+}
+
+function togglePause() {
+  isPaused = !isPaused;
+  const pauseBtn = document.getElementById('pauseBtn');
+  const pausePopup = document.getElementById('pausePopup');
+  
+  if (isPaused) {
+    pauseBtn.textContent = '▶️ Resume';
+    pauseStartTime = Date.now();
+    pausePopup.style.display = 'flex';
+  } else {
+    pauseBtn.textContent = '⏸️ Pause';
+    totalPausedTime += Date.now() - pauseStartTime;
+    pausePopup.style.display = 'none';
+  }
 }
 
 // Initialize game

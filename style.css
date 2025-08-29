@@ -82,6 +82,7 @@ button:disabled {
 .card.face-down { 
   background: linear-gradient(145deg, #1a472a, #0f3d24);
   color: #4CAF50; border-color: #2d5a3d;
+  display: flex; align-items: flex-start; justify-content: center; padding-top: 8px;
 }
 .card.face-down::after { content: '🂠'; font-size: 24px; }
 .card.red { color: #d32f2f; }
@@ -155,6 +156,8 @@ button:disabled {
   .card .suit { font-size: 12px; }
   .hint-display { font-size: 13px; padding: 10px; }
   .foundation-slot { width: 60px; height: 80px; font-size: 18px; }
+  .win-content { padding: 30px; }
+  .win-title { font-size: 2.2em; }
 }
 @media (max-width: 480px) {
   body { padding: 2px; min-height: 100vh; display: flex; flex-direction: column; }
@@ -178,6 +181,8 @@ button:disabled {
   .hint-display { font-size: 11px; padding: 5px; margin: 2px auto; }
   .foundation { gap: 3px; margin-top: 5px; flex-shrink: 0; }
   .foundation-slot { width: 40px; height: 50px; font-size: 12px; }
+  .win-content { padding: 20px; }
+  .win-title { font-size: 1.8em; }
 }
 @media (max-width: 360px) {
   h1 { font-size: 1.1em; }
@@ -190,4 +195,6 @@ button:disabled {
   .card .suit { font-size: 8px; }
   .card:not(:first-child) { top: calc(2px + var(--card-offset) * 10px); }
   .foundation-slot { width: 35px; height: 45px; font-size: 10px; }
+  .win-content { padding: 15px; }
+  .win-title { font-size: 1.5em; }
 }

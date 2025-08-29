@@ -33,6 +33,7 @@
       <button onclick="deal()">🃏 Deal Cards</button>
       <button onclick="undoMove()" id="undoBtn">↶ Undo</button>
       <button onclick="showHint()">💡 Hint</button>
+      <button onclick="togglePause()" id="pauseBtn">⏸️ Pause</button>
     </div>
     <div id="hintDisplay" class="hint-display">Click Hint for move suggestions</div>
   </div>
@@ -50,6 +51,13 @@
     </div>
   </div>
 
+  <div class="win-popup" id="pausePopup">
+    <div class="win-content">
+      <div class="win-title">⏸️ GAME PAUSED</div>
+      <button onclick="togglePause()" style="margin-top: 20px; background: linear-gradient(145deg, #2196F3, #1976D2); box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4);">▶️ Resume Game</button>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
-</html>
+</html> 
