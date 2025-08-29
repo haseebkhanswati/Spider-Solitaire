@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Spider Solitaire</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="header">
+    <h1>🕷️ Spider Solitaire</h1>
+    <div class="game-info">
+      <div class="stat-item">
+        <div class="stat-label">⏱️ Time</div>
+        <div class="stat-value" id="timer">00:00</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">🎯 Moves</div>
+        <div class="stat-value" id="moves">0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">⭐ Score</div>
+        <div class="stat-value" id="score">0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">🎯 Level</div>
+        <div class="stat-value" id="difficulty">Medium</div>
+      </div>
+    </div>
+    <div class="controls">
+      <button onclick="setDifficulty('easy')" id="easyBtn">🟢 Easy</button>
+      <button onclick="setDifficulty('medium')" id="mediumBtn" style="background: linear-gradient(145deg, #FF9800, #F57C00);">🟡 Medium</button>
+      <button onclick="setDifficulty('hard')" id="hardBtn">🔴 Hard</button>
+      <button onclick="newGame()">🎮 New Game</button>
+      <button onclick="deal()">🃏 Deal Cards</button>
+      <button onclick="undoMove()" id="undoBtn">↶ Undo</button>
+      <button onclick="showHint()">💡 Hint</button>
+    </div>
+    <div id="hintDisplay" class="hint-display">Click Hint for move suggestions</div>
+  </div>
+  <div class="game-board" id="board"></div>
+  <div class="foundation" id="foundation"></div>
+  
+  <div class="win-popup" id="winPopup">
+    <div class="win-content">
+      <div class="win-title" id="winTitle">🎉 YOU WIN! 🎉</div>
+      <div class="win-stats" id="winDifficulty">🎯 Level: Medium</div>
+      <div class="win-stats" id="winTime">⏱️ Time: 00:00</div>
+      <div class="win-stats" id="winMoves">🎯 Moves: 0</div>
+      <div class="win-stats" id="winScore">⭐ Score: 0</div>
+      <button onclick="closeWinPopup()" style="margin-top: 20px; background: linear-gradient(145deg, #FF9800, #F57C00); box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);">🎮 Play Again</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
